@@ -1,6 +1,7 @@
+import { MotiView } from 'moti'
 import styled from 'styled-components/native'
 
-export const Container = styled.View`
+export const Container = styled(MotiView)`
   background-color: ${({ theme }) => theme.colors.green500};
   align-self: flex-start;
   padding: 8px;

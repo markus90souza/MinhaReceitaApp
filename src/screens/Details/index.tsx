@@ -19,6 +19,7 @@ import { useTheme } from 'styled-components/native'
 import { Ingredient } from '@components/Ingredient'
 import { Video } from '@components/Video'
 import { Instruction } from '@components/Instruction'
+import { isFavorite, removeFavorite, saveFavorite } from '@storage/index'
 
 type RouteParams = {
   data: foodData
@@ -31,6 +32,8 @@ export function Details() {
   const navigation = useNavigation()
   const { colors } = useTheme()
 
+  const [favorite, setFavorite] = useState(false)
+
   const handleOpenVideo = () => {
     setShowVideo(true)
   }
@@ -41,12 +44,33 @@ export function Details() {
     } catch (error) {}
   }
 
+  const handleToggleFavorite = async (receita) => {
+    if (favorite) {
+      await removeFavorite(receita.id)
+      setFavorite(false)
+    } else {
+      await saveFavorite('@minhareceita', receita)
+      setFavorite(true)
+    }
+  }
+
   useLayoutEffect(() => {
+    const getIsFavorite = async () => {
+      const favorited = await isFavorite(data)
+      setFavorite(favorited)
+    }
+
+    getIsFavorite()
+
     navigation.setOptions({
       title: data ? data.name : 'Detalhes da receita',
       headerRight: () => (
-        <Pressable>
-          <Entypo name="heart-outlined" size={24} color={colors.red500} />
+        <Pressable onPress={() => handleToggleFavorite(data)}>
+          {favorite ? (
+            <Entypo name="heart" size={24} color={colors.red500} />
+          ) : (
+            <Entypo name="heart-outlined" size={24} color={colors.red500} />
+          )}
         </Pressable>
       ),
     })

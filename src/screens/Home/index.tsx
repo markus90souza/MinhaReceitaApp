@@ -12,6 +12,7 @@ import {
 import { Logo } from '@components/Logo'
 import { api } from '@services/api'
 import { Food } from '@components/Cards/Food'
+import { useNavigation } from '@react-navigation/native'
 
 type IngredientsData = {
   id: string
@@ -42,6 +43,8 @@ export function Home() {
 
   const [foods, setFoods] = useState<foodData[]>([])
 
+  const { navigate } = useNavigation()
+
   useEffect(() => {
     const getFoods = async () => {
       const { data } = await api.get('/foods')
@@ -51,12 +54,33 @@ export function Home() {
     getFoods()
   }, [])
 
-  const handleSearch = () => {}
+  const handleSearch = () => {
+    if (!search) {
+      return
+    }
+
+    setSearch('')
+
+    navigate('Search', { search })
+  }
   return (
     <Container>
       <Logo />
       <Header>
-        <Title>Encontre a receita {'\n'}que combina com você</Title>
+        <Title
+          from={{
+            opacity: 0,
+            translateY: 15,
+          }}
+          animate={{ opacity: 1, translateY: 0 }}
+          transition={{
+            delay: 100,
+            type: 'timing',
+            duration: 600,
+          }}
+        >
+          Encontre a receita {'\n'}que combina com você
+        </Title>
       </Header>
 
       <SearchContainer>

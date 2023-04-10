@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler'
 import { NavigationContainer } from '@react-navigation/native'
 import { Routes } from '@routes/index'
 import theme from '@theme/index'

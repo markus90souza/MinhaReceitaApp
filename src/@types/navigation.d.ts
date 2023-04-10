@@ -8,7 +8,9 @@ export declare global {
       }
       Home: undefined
       Favorites: undefined
-      Search: undefined
+      Search: {
+        search: string
+      }
     }
   }
 }
